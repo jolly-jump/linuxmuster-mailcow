@@ -1,6 +1,6 @@
 # linuxmuster-mailcow
 
-Integration of Mailcow for Linuxmuster.net
+Remote control of Mailcow for Linuxmuster.net
 
 - [Maintainance Details](#maintainance-details)
 - [How does it work](#how-does-it-work)
@@ -18,19 +18,23 @@ Integration of Mailcow for Linuxmuster.net
 |             Maintainer organisation              |      Netzint GmbH       |
 |                Primary maintainer                | andreas.till@netzint.de |
 
-\* The linuxmuster community consits of people who are nice and happy to help. They are not directly involved in the development though, and might not be able to help in all cases.
-\*\* The linuxmuster community consits of people who are nice and happy to help. They are not directly involved in the development though, and might not be able to help in any case.
+\* The linuxmuster community consists of people who are nice and happy to help. They are not directly involved in the development though, and might not be able to help in all cases.
+
+\*\* The linuxmuster community consists of people who are nice and happy to help. They are not directly involved in the development though, and might not be able to help in any case.
 
 ## How does it work
 
-A python script periodically syncs all linuxmuster accounts to mailcow. It also automatically creates aliases for user proxyAddress.
-For projects and classes, it also creates a mailbox. These mailboxes have a quota of 1mb and get a filter which redirects all mails to their members.
+You run this docker container on the same server that runs [mailcow-dockerized](https://github.com/mailcow/mailcow-dockerized). 
+A python script in the docker image periodically syncs all linuxmuster accounts from LDAP/AD to mailcow and adds aliases for each proxyAddresses of the account.
+
+For projects and classes, it also creates a mailbox. It then also automatically creates aliases for project/classes proxyAddresses.
+These mailboxes have a quota of 1mb and get a SIEVE-filter which redirects all mails to their members.
 Sogo and dovecot are configured automatically to authenticate against LDAP.  
-More details about the sync workflow can be found in SyncWorkflow.md
+More details about the sync workflow can be found in [SyncWorkflow.md](SyncWorkflow.md).
 
 ## Usage
 
-1. Create an API key with read/write permissions from the Mailcow UI
+1. Create an API key with read/write permissions from the Mailcow UI (admin -> System-Configuration/Access/ -> API)
 2. Create a file called `docker-compose.override.yml` in your mailcow directory with the following content:
 
    ```yaml
